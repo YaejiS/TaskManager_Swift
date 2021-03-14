@@ -7,7 +7,48 @@
 
 import SwiftUI
 
+struct SplashView: View {
+    @State var isActive:Bool = false
+    
+    var body: some View {
+        VStack {
+            if self.isActive {
+                ContentView()
+                
+            } else {
+                Text("Task Manager")
+                    .font(Font.largeTitle)
+                Image("").resizable().frame(width: 100, height: 100)
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation {
+                    self.isActive = true
+                }
+            }
+        }
+    }
+    
+}
+
+struct HomeView: View {
+    var body: some View {
+        Color(red: 242 / 255, green: 242 / 255, blue: 5 / 255).opacity(0.2)
+            .ignoresSafeArea()
+            .overlay(
+                VStack {
+                    Text("Main Screen")
+                    Image(systemName: "square.and.pencil")
+                }
+            )
+    }
+}
+
+//struct
+
 struct TaskListView: View {
+//struct HomeView: View {
     @ObservedObject var taskListVM = TaskListViewModel()
     
     @State var presentAddNewItem = false
@@ -16,6 +57,15 @@ struct TaskListView: View {
     let tasks = testDataTasks
     
     var body: some View {
+        
+        Color(red: 242 / 255, green: 242 / 255, blue: 5 / 255).opacity(0.2)
+            .ignoresSafeArea()
+            .overlay(
+                ZStack {
+
+                }
+            )
+        
         NavigationView {
             VStack(alignment: .leading){
                 List {
@@ -43,9 +93,23 @@ struct TaskListView: View {
     }
 }
 
+
+struct ContentView: View {
+    var body: some View {
+        TabView {
+            HomeView().tabItem {
+                Text("Home")
+            }
+            TaskListView().tabItem {
+                Text("Tasks")
+            }
+        }
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskListView()
+        SplashView()
     }
 }
 
